@@ -11,5 +11,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'html', 'js', 'json'],
   moduleNameMapper: {
     '^@mocks/(.*)$': '<rootDir>/mocks/$1',
+    '^@features/(.*)$': '<rootDir>/src/app/features/$1',
+    '^@shared/(.*)$': '<rootDir>/src/app/shared/$1',
   },
 };
