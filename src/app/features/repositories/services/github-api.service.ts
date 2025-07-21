@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Repository } from '../models/repository.model';
+import { Repository } from '@features/repositories/models';
 
 @Injectable({ providedIn: 'root' })
 export class GithubApiService {
-  private readonly BASE_URL = 'https://api.github.com/search/repositories';
+  private readonly BASE_URL: string =
+    'https://api.github.com/search/repositories';
   private http: HttpClient = inject(HttpClient);
 
   getRepositories(page = 1): Observable<{ items: Repository[] }> {
