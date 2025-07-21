@@ -5,14 +5,14 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { Repository } from '@features/repositories/models';
 import { GithubApiService } from '@features/repositories/services';
 import { InfiniteScrollDirective } from '@shared/directives/infinite-scroll.directive';
+import { RepoItemComponent } from '@features/repositories/components/repo-item/repo-item.component';
 
 @Component({
   selector: 'app-repo-list',
-  imports: [NgOptimizedImage, InfiniteScrollDirective],
+  imports: [InfiniteScrollDirective, RepoItemComponent, RepoItemComponent],
   templateUrl: './repo-list.component.html',
 })
 export class RepoListComponent implements OnInit {
