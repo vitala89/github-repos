@@ -8,4 +8,8 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!flat)/',
   ],
+  moduleFileExtensions: ['ts', 'html', 'js', 'json'],
+  moduleNameMapper: {
+    '^@mocks/(.*)$': '<rootDir>/mocks/$1',
+  },
 };
