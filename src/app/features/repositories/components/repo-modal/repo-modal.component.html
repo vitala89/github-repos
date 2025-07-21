@@ -1,0 +1,24 @@
+<dialog
+  [id]="modalId()"
+  popover
+  class="fixed top-1/2 z-50 max-w-md mx-auto p-6 bg-white dark:bg-neutral-900 border shadow-lg rounded-lg transform animate-fade-in"
+>
+  <button
+    class="absolute top-2 right-3 text-xl"
+    [attr.popovertarget]="modalId()"
+    popovertargetaction="hide"
+  >
+    ✖
+  </button>
+  <h2 class="text-lg font-bold text-blue-600">{{ repo().name }}</h2>
+  <p class="text-sm text-gray-700 dark:text-gray-300 my-2">
+    {{ repo().description }}
+  </p>
+  <div class="mt-3 text-sm text-yellow-600 dark:text-yellow-400">
+    ⭐ Stars: <b>{{ repo().stargazers_count }}</b
+    ><br />
+    🐛 Issues: <b>{{ repo().open_issues_count }}</b
+    ><br />
+    👤 Owner: <b>{{ repo().owner.login }}</b>
+  </div>
+</dialog>

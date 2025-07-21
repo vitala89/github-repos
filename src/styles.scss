@@ -1,2 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
+
+::backdrop {
+  backdrop-filter: blur(10px);
+}
+body:has(dialog[open]),
+body:has([popover]:popover-open) {
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
