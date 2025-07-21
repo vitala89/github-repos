@@ -1,0 +1,28 @@
+<li class="border p-4 m-4 rounded bg-white dark:bg-neutral-800 shadow">
+  <div class="flex items-start">
+    <img
+      [ngSrc]="repo().owner.avatar_url"
+      [alt]="repo().owner.login"
+      [width]="64"
+      [height]="64"
+      class="w-16 h-16 rounded border object-cover mr-4 flex-shrink-0"
+    />
+    <div class="flex-1">
+      <p class="font-semibold text-lg text-blue-600">
+        {{ repo().name }}
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+        {{ repo().description }}
+      </p>
+      <div class="flex items-center gap-3 text-sm mt-1">
+        <span class="border rounded px-2 py-0.5 font-medium">
+          ⭐ : {{ repo().stargazers_count }}
+        </span>
+        <span class="border rounded px-2 py-0.5 font-medium">
+          🐛 Issues: {{ repo().open_issues_count }}
+        </span>
+        <span class="ml-2 text-gray-500"> 👤: {{ repo().owner.login }} </span>
+      </div>
+    </div>
+  </div>
+</li>
