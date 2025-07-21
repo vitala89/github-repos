@@ -8,9 +8,14 @@
       class="w-16 h-16 rounded border object-cover mr-4 flex-shrink-0"
     />
     <div class="flex-1">
-      <p class="font-semibold text-lg text-blue-600">
+      <button
+        type="button"
+        [attr.popovertarget]="'repo-modal-' + repo().id"
+        class="font-semibold text-lg text-blue-600 bg-transparent p-0 border-0 cursor-pointer underline"
+      >
         {{ repo().name }}
-      </p>
+      </button>
+
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
         {{ repo().description }}
       </p>
@@ -26,3 +31,4 @@
     </div>
   </div>
 </li>
+<app-repo-modal [repo]="repo()" [modalId]="'repo-modal-' + repo().id" />
