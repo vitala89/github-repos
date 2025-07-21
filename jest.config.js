@@ -3,9 +3,9 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   transform: {
-    '^.+\\.ts$': 'ts-jest', // Only transform .ts files
+    '^.+\\.ts$': 'ts-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!flat)/', // Exclude modules except 'flat' from transformation
+    '/node_modules/(?!flat)/',
   ],
 };
