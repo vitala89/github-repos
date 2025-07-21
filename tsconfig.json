@@ -16,7 +16,8 @@
     "module": "preserve",
     "esModuleInterop": true,
     "paths": {
-      "@mocks/*": ["mocks/*"]
+      "@mocks/*": ["./mocks/*"],
+      "@repositories/*": ["./src/app/features/repositories/*"]
     }
   },
   "angularCompilerOptions": {

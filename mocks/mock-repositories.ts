@@ -1,4 +1,4 @@
-import { Repository } from '../src/app/features/repositories/models/repository.model';
+import { Repository } from '@repositories/models/repository.model';
 
 export const MOCK_REPOSITORIES: Repository[] = [
   {
