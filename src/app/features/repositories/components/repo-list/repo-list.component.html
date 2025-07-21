@@ -3,7 +3,7 @@
     🔥 Trending Repositories (last 30 days)
   </h1>
   <ul class="space-y-3">
-    @for (repo of repos; track repo.id) {
+    @for (repo of repositories(); track repo.id) {
       <li class="border p-4 rounded bg-white dark:bg-neutral-800 shadow">
         <div class="flex items-start">
           <img
@@ -14,17 +14,19 @@
             class="w-16 h-16 rounded border object-cover mr-4 flex-shrink-0"
           />
           <div class="flex-1">
-            <p class="font-semibold text-lg text-blue-600">{{ repo.name }}</p>
+            <p class="font-semibold text-lg text-blue-600">
+              {{ repo.name }}
+            </p>
             <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
               {{ repo.description }}
             </p>
             <div class="flex items-center gap-3 text-sm mt-1">
-              <span class="border rounded px-2 py-0.5 font-medium"
-                >⭐ : {{ repo.stargazers_count }}</span
-              >
-              <span class="border rounded px-2 py-0.5 font-medium"
-                >🐛 Issues: {{ repo.open_issues_count }}</span
-              >
+              <span class="border rounded px-2 py-0.5 font-medium">
+                ⭐ : {{ repo.stargazers_count }}
+              </span>
+              <span class="border rounded px-2 py-0.5 font-medium">
+                🐛 Issues: {{ repo.open_issues_count }}
+              </span>
               <span class="ml-2 text-gray-500">
                 👤: {{ repo.owner.login }}
               </span>
@@ -34,4 +36,9 @@
       </li>
     }
   </ul>
+  <div appInfiniteScroll (scrolled)="loadRepos()" class="h-1"></div>
+
+  @if (loading()) {
+    <div class="mt-4 text-center text-gray-500">Loading...</div>
+  }
 </div>
