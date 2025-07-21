@@ -39,10 +39,20 @@ module.exports = tseslint.config(
   },
   {
     files: ["**/*.html"],
+    plugins: {
+      prettier: require("eslint-plugin-prettier"),
+    },
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
-    rules: {},
-  }
+    rules: {
+      "prettier/prettier": [
+        "error",
+        {
+          tabWidth: 2,
+        },
+      ],
+    },
+  },
 );
