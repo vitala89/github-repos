@@ -1,13 +1,27 @@
-<div class="inline-flex space-x-1 cursor-pointer">
+<div class="inline-flex space-x-1" [class.cursor-pointer]="!readonly()">
   @for (i of [1, 2, 3, 4, 5]; track i) {
-    <button
-      type="button"
-      (click)="set(i)"
-      [class.text-yellow-500]="value() >= i"
-      class="text-xl bg-transparent border-none p-0 m-0 cursor-pointer focus:outline-none"
-      [attr.aria-label]="'Set rating to {{ i }}'"
-    >
-      ★
-    </button>
+    @if (readonly()) {
+      <span
+        [ngClass]="{
+          'icon-star': value() >= i,
+          'text-xl': true,
+        }"
+        title="Rate"
+      >
+        <lucide-icon [name]="starIcon"></lucide-icon>
+      </span>
+    } @else {
+      <button
+        type="button"
+        (click)="set(i)"
+        [ngClass]="{
+          'icon-star': value() >= i,
+          'text-xl bg-transparent border-none p-0 m-0 cursor-pointer focus:outline-none': true,
+        }"
+        [attr.aria-label]="'Set rating to ' + i"
+      >
+        <lucide-icon [name]="starIcon"></lucide-icon>
+      </button>
+    }
   }
 </div>

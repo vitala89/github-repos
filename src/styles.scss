@@ -1,11 +1,19 @@
+//Imports (external libraries first)
 @use "tailwindcss";
 @use "ngx-toastr/toastr";
+
+//Variables and constants
+$yellow-color: #eab308;
+
+//Custom variants and mixins
 @custom-variant dark (&:where(.dark, .dark *));
 
+//Base element styles
 dialog::backdrop {
   backdrop-filter: blur(10px);
 }
 
+//Layout/utility rules
 body:has(dialog[open]),
 body:has([popover]:popover-open) {
   overflow: hidden;
@@ -14,4 +22,15 @@ body:has([popover]:popover-open) {
     pointer-events: none;
     user-select: none;
   }
+}
+
+//Components/utilities
+.icon-star svg {
+  color: $yellow-color;
+  fill: $yellow-color;
+}
+
+//Dark mode and custom variant overrides
+.dark .icon-star svg {
+  color: #ffd700;
 }
