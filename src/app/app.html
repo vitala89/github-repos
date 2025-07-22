@@ -2,8 +2,22 @@
   class="min-h-screen bg-gray-100 dark:bg-neutral-900 text-black dark:text-white"
 >
   <div class="p-4 flex justify-end">
-    <button (click)="theme.toggle()" class="px-4 py-2 border rounded">
-      {{ theme.theme() === "dark" ? "🌞 Light" : "🌙 Dark" }}
+    <button
+      (click)="theme.toggle()"
+      class="flex items-center gap-2 px-4 py-2 rounded-full shadow-sm shadow-gray-200 dark:shadow-black/30 bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 border-none transition-all duration-150 focus:outline-none active:scale-95 cursor-pointer"
+      [attr.aria-label]="
+        theme.theme() === 'dark'
+          ? 'Switch to light mode'
+          : 'Switch to dark mode'
+      "
+    >
+      <lucide-icon
+        [name]="theme.theme() === 'dark' ? sunIcon : moonIcon"
+        [attr.title]="
+          theme.theme() === 'dark' ? 'Sun (Light Mode)' : 'Moon (Dark Mode)'
+        "
+        class="w-5 h-5"
+      ></lucide-icon>
     </button>
   </div>
   <router-outlet />
