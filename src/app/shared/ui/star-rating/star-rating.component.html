@@ -1,0 +1,13 @@
+<div class="flex space-x-1 cursor-pointer">
+  @for (i of [1, 2, 3, 4, 5]; track i) {
+    <button
+      type="button"
+      (click)="set(i)"
+      [class.text-yellow-500]="value() >= i"
+      class="text-xl bg-transparent border-none p-0 m-0 cursor-pointer focus:outline-none"
+      [attr.aria-label]="'Set rating to {{ i }}'"
+    >
+      ★
+    </button>
+  }
+</div>
