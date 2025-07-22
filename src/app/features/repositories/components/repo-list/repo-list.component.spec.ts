@@ -4,6 +4,7 @@ import { GithubApiService } from '@features/repositories/services';
 import { of, throwError } from 'rxjs';
 import { MOCK_REPOSITORIES } from '@mocks/mock-repositories';
 import { setupMockIntersectionObserver } from '@mocks/mock-intersection-observer';
+import { ToastService } from '@core/services/toast.service';
 
 setupMockIntersectionObserver();
 
@@ -11,15 +12,26 @@ describe('RepoListComponent', () => {
   let fixture: ComponentFixture<RepoListComponent>;
   let component: RepoListComponent;
   let githubServiceMock: jest.Mocked<GithubApiService>;
+  let toastServiceMock: jest.Mocked<ToastService>;
 
   beforeEach(async () => {
     githubServiceMock = {
       getRepositories: jest.fn().mockReturnValue(of({ items: [] })),
     } as unknown as jest.Mocked<GithubApiService>;
 
+    toastServiceMock = {
+      error: jest.fn(),
+      success: jest.fn(),
+      info: jest.fn(),
+      warning: jest.fn(),
+    } as unknown as jest.Mocked<ToastService>;
+
     await TestBed.configureTestingModule({
       imports: [RepoListComponent],
-      providers: [{ provide: GithubApiService, useValue: githubServiceMock }],
+      providers: [
+        { provide: GithubApiService, useValue: githubServiceMock },
+        { provide: ToastService, useValue: toastServiceMock },
+      ],
     }).compileComponents();
   });
 
@@ -70,14 +82,14 @@ describe('RepoListComponent', () => {
   it('should handle error from GithubApiService', () => {
     const error = new Error('API Error');
     githubServiceMock.getRepositories.mockReturnValue(throwError(() => error));
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => undefined);
 
     fixture = TestBed.createComponent(RepoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(consoleSpy).toHaveBeenCalledWith(error);
-    consoleSpy.mockRestore();
+
+    expect(toastServiceMock.error).toHaveBeenCalledWith(
+      'Failed to load repositories. Please try again later.',
+    );
+    expect(component.loading()).toBe(false);
   });
 });

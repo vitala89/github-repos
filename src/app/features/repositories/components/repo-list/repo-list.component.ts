@@ -9,6 +9,7 @@ import { Repository } from '@features/repositories/models';
 import { GithubApiService } from '@features/repositories/services';
 import { InfiniteScrollDirective } from '@shared/directives/infinite-scroll.directive';
 import { RepoItemComponent } from '@features/repositories/components/repo-item/repo-item.component';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-repo-list',
@@ -20,6 +21,7 @@ export class RepoListComponent implements OnInit {
   page: WritableSignal<number> = signal(1);
   loading: WritableSignal<boolean> = signal(false);
   private github: GithubApiService = inject(GithubApiService);
+  private toast: ToastService = inject(ToastService);
 
   ngOnInit(): void {
     this.loadRepos();
@@ -34,7 +36,12 @@ export class RepoListComponent implements OnInit {
         this.repositories.update((prev) => [...prev, ...items]);
         this.page.update((n) => n + 1);
       },
-      error: (err) => console.error(err),
+      error: () => {
+        this.toast.error(
+          'Failed to load repositories. Please try again later.',
+        );
+        this.loading.set(false);
+      },
       complete: () => this.loading.set(false),
     });
   }
