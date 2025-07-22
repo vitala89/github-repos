@@ -1,6 +1,7 @@
 @use "tailwindcss";
+@use "ngx-toastr/toastr";
 
-::backdrop {
+dialog::backdrop {
   backdrop-filter: blur(10px);
 }
 
