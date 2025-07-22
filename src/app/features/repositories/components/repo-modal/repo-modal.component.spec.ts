@@ -21,6 +21,7 @@ describe('RepoModalComponent', () => {
 
     mockToast = {
       success: jest.fn(),
+      warning: jest.fn(),
     } as unknown as jest.Mocked<ToastService>;
 
     await TestBed.configureTestingModule({
@@ -31,55 +32,113 @@ describe('RepoModalComponent', () => {
       ],
     }).compileComponents();
 
+    setupComponent();
+  });
+
+  const setupComponent = () => {
     fixture = TestBed.createComponent(RepoModalComponent);
     component = fixture.componentInstance;
-
-    // Use the real mock repo data
     Object.defineProperty(component, 'repo', { get: () => () => mockRepo });
     Object.defineProperty(component, 'modalId', {
       get: () => () => mockModalId,
     });
     fixture.detectChanges();
-  });
+  };
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call RatingStore.set with correct parameters on rate()', () => {
-    component.rate(5);
-    expect(mockRatingStore.set).toHaveBeenCalledWith('1', 5);
+  it('should set pending stars when setPendingStars is called', () => {
+    component.setPendingStars(5);
+    expect(component.pendingStars()).toBe(5);
   });
 
-  it('should call RatingStore.get with correct parameters on rating()', () => {
+  it('should display pending stars when available', () => {
+    component.setPendingStars(4);
+
+    mockRatingStore.get.mockReturnValue(0);
+
+    expect(component.displayStars()).toBe(4);
+  });
+
+  it('should fall back to current rating when no pending stars', () => {
+    component.pendingStars.set(undefined);
+    mockRatingStore.get.mockReturnValue(3);
+    setupComponent();
+
+    expect(component.displayStars()).toBe(3);
+  });
+
+  it('should get current rating from store', () => {
     mockRatingStore.get.mockReturnValue(4);
-    expect(component.rating()).toBe(4);
+    setupComponent();
+
+    expect(component.currentRating()).toBe(4);
     expect(mockRatingStore.get).toHaveBeenCalledWith('1');
   });
 
-  it('should default to 0 if rating is not found in RatingStore', () => {
+  it('should show success toast on dialog close with new rating', (done) => {
     mockRatingStore.get.mockReturnValue(0);
-    expect(component.rating()).toBe(0);
-  });
 
-  it('should show toast on dialog close after rating', (done) => {
-    component.rate(3);
+    component.setPendingStars(3);
+
     const dialogMock = { open: false } as unknown as HTMLDialogElement;
     component.onToggle({ target: dialogMock } as unknown as Event);
+
     setTimeout(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
         `You gave 3★ to the repository "${mockRepo.name}"`,
       );
+
+      expect(mockRatingStore.set).toHaveBeenCalledWith('1', 3);
+
+      expect(component.pendingStars()).toBeUndefined();
+
       done();
     }, 110);
   });
 
-  it('should not show toast if dialog closes and no rating was made', (done) => {
+  it('should not show toast if dialog closes and no pending stars', (done) => {
+    component.pendingStars.set(undefined);
+
     const dialogMock = { open: false } as unknown as HTMLDialogElement;
     component.onToggle({ target: dialogMock } as unknown as Event);
+
     setTimeout(() => {
       expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockRatingStore.set).not.toHaveBeenCalled();
       done();
     }, 110);
+  });
+
+  it('should show warning toast when removing a rating', (done) => {
+    mockRatingStore.get.mockReturnValue(3);
+
+    setupComponent();
+
+    component.setPendingStars(0);
+
+    const dialogMock = { open: false } as unknown as HTMLDialogElement;
+    component.onToggle({ target: dialogMock } as unknown as Event);
+
+    setTimeout(() => {
+      expect(mockToast.warning).toHaveBeenCalledWith(
+        `You cancelled your vote for "${mockRepo.name}".`,
+      );
+
+      expect(mockRatingStore.set).toHaveBeenCalledWith('1', 0);
+
+      done();
+    }, 110);
+  });
+
+  it('should manually set pendingStars to undefined', (done) => {
+    component.pendingStars.set(3);
+    component.pendingStars.set(undefined);
+    setTimeout(() => {
+      expect(component.pendingStars()).toBeUndefined();
+      done();
+    }, 10);
   });
 });
