@@ -21,4 +21,6 @@
     ><br />
     👤 Owner: <b>{{ repo().owner.login }}</b>
   </div>
+  <h3 class="mt-4 text-sm font-medium">Rate this repository:</h3>
+  <app-star-rating [value]="rating()" (rated)="rate($event)" />
 </dialog>
