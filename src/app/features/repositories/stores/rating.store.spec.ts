@@ -6,7 +6,7 @@ describe('RatingStore', () => {
   let originalLocalStorage: Storage;
 
   beforeEach(() => {
-    originalLocalStorage = window.localStorage; // Save original
+    originalLocalStorage = window.localStorage;
 
     localStorageMock = {};
     Object.defineProperty(window, 'localStorage', {
