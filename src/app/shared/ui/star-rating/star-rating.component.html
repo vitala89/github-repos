@@ -1,4 +1,8 @@
-<div class="inline-flex space-x-1" [class.cursor-pointer]="!readonly()">
+<div
+  class="inline-flex space-x-1"
+  [class.cursor-pointer]="!readonly()"
+  (mouseleave)="onStarsLeave()"
+>
   @for (i of [1, 2, 3, 4, 5]; track i) {
     @if (readonly()) {
       <span
@@ -8,19 +12,30 @@
         }"
         title="Rate"
       >
-        <lucide-icon [name]="starIcon"></lucide-icon>
+        <lucide-icon
+          [name]="starIcon"
+          class="text-gray-300 dark:text-gray-600"
+        ></lucide-icon>
       </span>
     } @else {
       <button
         type="button"
-        (click)="set(i)"
+        (click)="rate(i)"
+        (mouseenter)="onStarHover(i)"
         [ngClass]="{
-          'icon-star': value() >= i,
+          'icon-star': getStarValue() >= i,
           'text-xl bg-transparent border-none p-0 m-0 cursor-pointer focus:outline-none': true,
+          'hover:scale-110 transition-all duration-150': true,
+          'text-yellow-400 transform scale-110':
+            getStarValue() >= i && hoverValue() > 0,
+          'text-gray-300 dark:text-gray-600': getStarValue() < i,
         }"
         [attr.aria-label]="'Set rating to ' + i"
       >
-        <lucide-icon [name]="starIcon"></lucide-icon>
+        <lucide-icon
+          [name]="starIcon"
+          class="text-gray-300 dark:text-gray-600"
+        ></lucide-icon>
       </button>
     }
   }

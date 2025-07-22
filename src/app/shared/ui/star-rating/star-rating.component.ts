@@ -4,6 +4,7 @@ import {
   InputSignal,
   output,
   OutputEmitterRef,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, StarIcon } from 'lucide-angular';
@@ -20,9 +21,32 @@ export class StarRatingComponent {
   rated: OutputEmitterRef<number> = output<number>();
   readonly starIcon = StarIcon;
 
-  set(val: number): void {
+  hoverValue = signal(0);
+
+  rate(val: number): void {
     if (!this.readonly()) {
-      this.rated.emit(val);
+      if (this.value() === val) {
+        this.rated.emit(0);
+        this.hoverValue.set(0);
+      } else {
+        this.rated.emit(val);
+      }
     }
+  }
+
+  onStarHover(val: number): void {
+    if (!this.readonly()) {
+      this.hoverValue.set(val);
+    }
+  }
+
+  onStarsLeave(): void {
+    if (!this.readonly()) {
+      this.hoverValue.set(0);
+    }
+  }
+
+  getStarValue(): number {
+    return this.hoverValue() > 0 ? this.hoverValue() : this.value();
   }
 }
