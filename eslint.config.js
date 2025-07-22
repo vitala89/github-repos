@@ -4,6 +4,7 @@ const angular = require("angular-eslint");
 const prettier = require("eslint-config-prettier");
 
 module.exports = tseslint.config(
+  { ignores: ["**/node_modules/**", "dist/", "coverage/", "src/**/*.spec.ts"] },
   {
     files: ["**/*.ts"],
     extends: [
