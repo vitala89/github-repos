@@ -10,10 +10,11 @@ import { GithubApiService } from '@features/repositories/services';
 import { InfiniteScrollDirective } from '@shared/directives/infinite-scroll.directive';
 import { RepoItemComponent } from '@features/repositories/components/repo-item/repo-item.component';
 import { ToastService } from '@core/services/toast.service';
+import { LoadingComponent } from '@shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-repo-list',
-  imports: [InfiniteScrollDirective, RepoItemComponent, RepoItemComponent],
+  imports: [InfiniteScrollDirective, RepoItemComponent, LoadingComponent],
   templateUrl: './repo-list.component.html',
 })
 export class RepoListComponent implements OnInit {
@@ -22,6 +23,8 @@ export class RepoListComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);
   private github: GithubApiService = inject(GithubApiService);
   private toast: ToastService = inject(ToastService);
+  title = '🔥 Trending Repositories (last 30 days)';
+  loaderText = 'Loading repositories...';
 
   ngOnInit(): void {
     this.loadRepos();

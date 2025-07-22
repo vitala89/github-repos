@@ -1,6 +1,6 @@
 <div class="p-4">
   <h1 class="text-xl font-bold mb-4">
-    🔥 Trending Repositories (last 30 days)
+    {{ title }}
   </h1>
   <ul class="space-y-3">
     @for (repo of repositories(); track repo.id) {
@@ -10,6 +10,8 @@
   <div appInfiniteScroll (scrolled)="loadRepos()" class="h-1"></div>
 
   @if (loading()) {
-    <div class="mt-4 text-center text-gray-500">Loading...</div>
+    <div class="mt-4 flex justify-center">
+      <app-loading [text]="loaderText"></app-loading>
+    </div>
   }
 </div>
