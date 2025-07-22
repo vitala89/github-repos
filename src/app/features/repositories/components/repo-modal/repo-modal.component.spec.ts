@@ -1,12 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RepoModalComponent } from './repo-modal.component';
 import { RatingStore } from '@features/repositories/stores/rating.store';
-import { Repository } from '@features/repositories';
+import { ToastService } from '@core/services/toast.service';
+import { MOCK_REPOSITORIES } from '@mocks/mock-repositories';
 
 describe('RepoModalComponent', () => {
   let fixture: ComponentFixture<RepoModalComponent>;
   let component: RepoModalComponent;
   let mockRatingStore: jest.Mocked<RatingStore>;
+  let mockToast: jest.Mocked<ToastService>;
+
+  const mockRepo = MOCK_REPOSITORIES[0];
+  const mockModalId = 'test-modal-id';
 
   beforeEach(async () => {
     mockRatingStore = {
@@ -14,22 +19,27 @@ describe('RepoModalComponent', () => {
       get: jest.fn().mockReturnValue(0),
     } as unknown as jest.Mocked<RatingStore>;
 
+    mockToast = {
+      success: jest.fn(),
+    } as unknown as jest.Mocked<ToastService>;
+
     await TestBed.configureTestingModule({
       imports: [RepoModalComponent],
-      providers: [{ provide: RatingStore, useValue: mockRatingStore }],
+      providers: [
+        { provide: RatingStore, useValue: mockRatingStore },
+        { provide: ToastService, useValue: mockToast },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RepoModalComponent);
     component = fixture.componentInstance;
 
-    const mockRepo = { id: 1 } as Repository;
-    Object.defineProperty(component, 'repo', {
-      get: () => () => mockRepo,
-    });
-
+    // Use the real mock repo data
+    Object.defineProperty(component, 'repo', { get: () => () => mockRepo });
     Object.defineProperty(component, 'modalId', {
-      get: () => () => 'test-modal-id',
+      get: () => () => mockModalId,
     });
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -37,26 +47,39 @@ describe('RepoModalComponent', () => {
   });
 
   it('should call RatingStore.set with correct parameters on rate()', () => {
-    const stars = 5;
-    component.rate(stars);
-    expect(mockRatingStore.set).toHaveBeenCalledWith('1', stars);
+    component.rate(5);
+    expect(mockRatingStore.set).toHaveBeenCalledWith('1', 5);
   });
 
   it('should call RatingStore.get with correct parameters on rating()', () => {
-    const mockRepo = { id: 1 } as Repository;
-    Object.defineProperty(component, 'repo', {
-      get: () => () => mockRepo,
-    });
     mockRatingStore.get.mockReturnValue(4);
-
-    const rating = component.rating();
+    expect(component.rating()).toBe(4);
     expect(mockRatingStore.get).toHaveBeenCalledWith('1');
-    expect(rating).toBe(4);
   });
 
   it('should default to 0 if rating is not found in RatingStore', () => {
     mockRatingStore.get.mockReturnValue(0);
-    const rating = component.rating();
-    expect(rating).toBe(0);
+    expect(component.rating()).toBe(0);
+  });
+
+  it('should show toast on dialog close after rating', (done) => {
+    component.rate(3);
+    const dialogMock = { open: false } as unknown as HTMLDialogElement;
+    component.onToggle({ target: dialogMock } as unknown as Event);
+    setTimeout(() => {
+      expect(mockToast.success).toHaveBeenCalledWith(
+        `You gave 3★ to the repository "${mockRepo.name}"`,
+      );
+      done();
+    }, 110);
+  });
+
+  it('should not show toast if dialog closes and no rating was made', (done) => {
+    const dialogMock = { open: false } as unknown as HTMLDialogElement;
+    component.onToggle({ target: dialogMock } as unknown as Event);
+    setTimeout(() => {
+      expect(mockToast.success).not.toHaveBeenCalled();
+      done();
+    }, 110);
   });
 });

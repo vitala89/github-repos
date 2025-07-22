@@ -1,4 +1,6 @@
 <dialog
+  (toggle)="onToggle($event)"
+  #modalRef
   [id]="modalId()"
   popover
   class="fixed top-1/2 z-50 max-w-md mx-auto p-6 bg-white dark:bg-neutral-900 border shadow-lg rounded-lg transform animate-fade-in"
