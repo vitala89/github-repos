@@ -1,6 +1,10 @@
 <div
   class="min-h-screen bg-gray-100 dark:bg-neutral-900 text-black dark:text-white"
 >
-  <div class="p-4 flex justify-end"></div>
+  <div class="p-4 flex justify-end">
+    <button (click)="theme.toggle()" class="px-4 py-2 border rounded">
+      {{ theme.theme() === "dark" ? "🌞 Light" : "🌙 Dark" }}
+    </button>
+  </div>
   <router-outlet />
 </div>
