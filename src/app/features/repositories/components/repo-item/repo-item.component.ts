@@ -1,7 +1,8 @@
-import { Component, input, ViewChild } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Repository } from '@features/repositories';
 import { RepoModalComponent } from '@features/repositories/components/repo-modal/repo-modal.component';
+import { RatingStore } from '@features/repositories/stores/rating.store';
 
 @Component({
   selector: 'app-repo-item',
@@ -10,6 +11,10 @@ import { RepoModalComponent } from '@features/repositories/components/repo-modal
   templateUrl: './repo-item.component.html',
 })
 export class RepoItemComponent {
+  private readonly ratingStore = inject(RatingStore);
   repo = input.required<Repository>();
-  @ViewChild(RepoModalComponent) modal!: RepoModalComponent;
+
+  rating = computed(() => {
+    return this.ratingStore.get(String(this.repo().id)) || 0;
+  });
 }
