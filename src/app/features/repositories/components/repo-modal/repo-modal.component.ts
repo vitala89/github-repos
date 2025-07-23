@@ -7,18 +7,13 @@ import {
   signal,
   computed,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Repository } from '@features/repositories/models';
 import { RatingStore } from '@features/repositories/stores/rating.store';
 import { StarRatingComponent } from '@shared/ui/star-rating/star-rating.component';
 import { ToastService } from '@core/services/toast.service';
-import {
-  BugIcon,
-  LucideAngularModule,
-  StarIcon,
-  UserIcon,
-  XIcon,
-} from 'lucide-angular';
+import { LucideAngularModule, XIcon } from 'lucide-angular';
+import { ItemCardComponent } from '@shared/ui/item-card/item-card.component';
 
 @Component({
   selector: 'app-repo-modal',
@@ -27,7 +22,7 @@ import {
     CommonModule,
     StarRatingComponent,
     LucideAngularModule,
-    NgOptimizedImage,
+    ItemCardComponent,
   ],
   templateUrl: './repo-modal.component.html',
 })
@@ -35,9 +30,6 @@ export class RepoModalComponent {
   private readonly ratingStore = inject(RatingStore);
   private readonly toast = inject(ToastService);
 
-  readonly starIcon = StarIcon;
-  readonly bugIcon = BugIcon;
-  readonly userIcon = UserIcon;
   readonly xIcon = XIcon;
 
   @ViewChild('modalRef', { static: true })
