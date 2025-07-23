@@ -1,0 +1,85 @@
+<div
+  class="flex"
+  [ngClass]="{
+    'flex-col items-center gap-2': !compact(),
+    'items-start gap-4': compact(),
+  }"
+>
+  <img
+    [ngSrc]="repo().owner.avatar_url"
+    [alt]="repo().owner.login"
+    [width]="64"
+    [height]="64"
+    class="rounded-full object-cover shadow-sm"
+    [class.w-16]="true"
+    [class.h-16]="true"
+  />
+  <div class="flex flex-col" [class.items-center]="!compact()">
+    @if (clickable()) {
+      <button
+        type="button"
+        [attr.popovertarget]="modalId()"
+        class="inline-flex font-semibold text-lg text-blue-600 dark:text-blue-400 bg-transparent p-0 border-0 cursor-pointer transition-colors hover:text-blue-800 dark:hover:text-blue-200 mb-2"
+        [class.text-center]="!compact()"
+      >
+        {{ repo().name }}
+      </button>
+    } @else {
+      <h2
+        class="font-semibold text-lg text-blue-600 dark:text-blue-400"
+        [class.text-center]="!compact()"
+      >
+        {{ repo().name }}
+      </h2>
+    }
+
+    @if (rating() > 0) {
+      <div class="mt-1 mb-2">
+        <app-star-rating
+          [value]="rating()"
+          [readonly]="readonly()"
+        ></app-star-rating>
+      </div>
+    }
+
+    <p
+      class="text-sm text-gray-600 dark:text-gray-300 mb-3"
+      [class.text-center]="!compact()"
+    >
+      {{ repo().description }}
+    </p>
+
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <div
+        class="rounded-full px-3 py-1 font-medium bg-gray-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 shadow-sm inline-flex items-center gap-1 align-middle"
+      >
+        <lucide-icon
+          title="Number of stars"
+          [name]="starIcon"
+          class="inline align-middle"
+        ></lucide-icon>
+        <span class="align-middle">{{ repo().stargazers_count }}</span>
+      </div>
+      <div
+        class="rounded-full px-3 py-1 font-medium bg-gray-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 shadow-sm inline-flex items-center gap-1"
+      >
+        <lucide-icon
+          title="Issues"
+          [name]="bugIcon"
+          class="inline align-middle"
+        ></lucide-icon>
+        {{ repo().open_issues_count }}
+      </div>
+      <div
+        class="text-gray-500 dark:text-gray-400 inline-flex items-center gap-1"
+      >
+        <lucide-icon
+          title="Owner"
+          [name]="userIcon"
+          class="inline align-middle"
+        ></lucide-icon>
+        {{ repo().owner.login }}
+      </div>
+    </div>
+  </div>
+</div>
